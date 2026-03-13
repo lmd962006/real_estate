@@ -29,7 +29,7 @@ def crawl_a_page(api_url: str):
     except Exception as e:
         print(f"Lỗi khác ở link {api_url}: {e}")
 
-def crawl_ten_thousand_page(start_id: int, file_name: str):
+def crawl_ten_thousand_page_of_generic(start_id: int, file_name: str):
     urls = [
         f"https://api.batdongsan.com.vn/bff-consumer-mobile/api/v2/listings/{listing_id}" 
         for listing_id in range(start_id, start_id + 10000)
@@ -39,10 +39,20 @@ def crawl_ten_thousand_page(start_id: int, file_name: str):
             futures = {executor.submit(crawl_a_page, url): url for url in urls}
             for future in concurrent.futures.as_completed(futures):
                 data = future.result()
-                saved = 0
                 if data:
                     json_string = json.dumps(data, ensure_ascii=False)
                     f.write(json_string + '\n')
-                    saved += 1
-                    if saved % 100 == 0:
-                        print(f"Đã lưu thành công {saved} file")
+
+def crawl_ten_thousand_page_of_price(start_id: int, file_name: str):
+    urls = [
+        f"https://api.batdongsan.com.vn/bff-consumer-mobile/api/v1/listings/{listing_id}/pricing-histories?countOfYears=5&listingType=38" 
+        for listing_id in range(start_id, start_id + 10000)
+    ]
+    with open(file_name, 'a', encoding='utf-8') as f:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+            futures = {executor.submit(crawl_a_page, url): url for url in urls}
+            for future in concurrent.futures.as_completed(futures):
+                data = future.result()
+                if data:
+                    json_string = json.dumps(data, ensure_ascii=False)
+                    f.write(json_string + '\n')

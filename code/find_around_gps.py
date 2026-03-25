@@ -39,7 +39,7 @@ def give_data_batdongsan():
                 CAST(raw_data ->> 'latitude' AS FLOAT) AS latitude
             FROM generic_real_estate
             WHERE raw_data -> 'latitude' IS NOT NULL
-            LIMIT 5
+            LIMIT 30000
         """
         cursor.execute(query)
         records = cursor.fetchall()
@@ -50,8 +50,6 @@ def give_data_batdongsan():
             longitude = row[2]
             latitude = row[3]
             coordinates_temp.append((latitude, longitude))
-            print(f"ID: {row[0]} | Huyện: {row[1]} | GPS: ({latitude}, {longitude})")
-            print(f"Kiểu dữ liệu của ID: {type(row[0])} | Của GPS: {type(longitude)}\n")
     except Exception as e:
         print(f"Có lỗi: {e}")
 
@@ -68,7 +66,7 @@ def give_data_meey():
                 CAST(raw_data -> 'location' -> 'coordinates' ->> 1 AS FLOAT) AS latitude
             FROM meey_estate
             WHERE raw_data -> 'location' -> 'coordinates' IS NOT NULL
-            LIMIT 5
+            LIMIT 30000
         """
         cursor.execute(query)
         records = cursor.fetchall()
@@ -79,8 +77,6 @@ def give_data_meey():
             longitude = row[2]
             latitude = row[3]
             coordinates_temp.append((latitude, longitude))
-            print(f"ID: {row[0]} | Huyện: {row[1]} | GPS: ({latitude}, {longitude})")
-            print(f"Kiểu dữ liệu của ID: {type(row[0])} | Của GPS: {type(longitude)}\n")
     except Exception as e:
         print(f"Có lỗi: {e}")
 

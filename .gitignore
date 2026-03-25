@@ -1,12 +1,11 @@
 # Bỏ qua thư mục chứa dữ liệu (Data thường rất nặng và không nên public)
-crawldata/
+*.jsonl
 
 # Bỏ qua các file rác do Python tự sinh ra
 __pycache__/
 *.py[cod]
 
 # Bỏ qua file kết quả dự đoán
-submission.csv
 
 # Bỏ qua môi trường ảo (nếu bạn có dùng)
 venv/
